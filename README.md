@@ -18,7 +18,7 @@ pip install -r requirements.txt
 
 Buid Docker Image
 ``` 
-docker build -t <image_name>:<tagname>
+docker build -t <image_name>:<tagname> .
 ```
 > Note: image name for docker must be in lowercase
 
@@ -40,4 +40,8 @@ docker ps
 To stop the docker container
 ```
 docker stop <container_id>
+```
+
+```
+python setup.py install
 ```
