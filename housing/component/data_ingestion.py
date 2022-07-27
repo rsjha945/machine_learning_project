@@ -14,16 +14,11 @@ from sklearn.model_selection import StratifiedShuffleSplit
 class DataIngestion:
     def __init__(self, data_ingestion_config:DataIngestionConfig):
         try:
-            logging.info(f"{'='*20}Data Ingestion log started.{'='*20}")
+            logging.info(f"{'>>'*20}Data Ingestion log started.{'<<'*20}")
             self.data_ingestion_config = data_ingestion_config
         except Exception as e:
-            raise HousingException(e, sys)
-        
-        def initiate_data_ingestion(elf) -> DataIngestionArtifact:
-            try:
-                pass
-            except Exception as e:
-                raise HousingException(e, sys) from e
+            raise HousingException(e, sys) from e
+
     def download_housing_data(self,) -> str:
         try:
             # extract remote url to download dataset
@@ -68,7 +63,7 @@ class DataIngestion:
             raise HousingException(e, sys) from e
 
 
-    def split_data_as_train_test(self):
+    def split_data_as_train_test(self) ->DataIngestionArtifact:
         try:
             raw_data_dir = self.data_ingestion_config.raw_data_dir
 
@@ -79,9 +74,9 @@ class DataIngestion:
             logging.info(f"Reading csv file: [{housing_file_path}]")
             housing_data_frame = pd.read_csv(housing_file_path)
             
-            housing_data_frame["income_Cat"] = pd.cut(
+            housing_data_frame["income_cat"] = pd.cut(
                 housing_data_frame["median_income"],
-                bins=[0.0, 1.5, 3.0, 4.5,  6.0, np.inf],
+                bins=[0.0, 1.5, 3.0, 4.5,6.0 , np.inf],
                 labels = [1, 2, 3, 4, 5]
             )
 
@@ -90,9 +85,9 @@ class DataIngestion:
             strat_train_set = None
             strat_test_set = None
 
-            split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_State=42)
+            split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
 
-            for train_index, test_index in split.split(housing_data_frame, housing_data_frame["income_Cat"]):
+            for train_index, test_index in split.split(housing_data_frame, housing_data_frame["income_cat"]):
                 strat_train_set = housing_data_frame.loc[train_index].drop(["income_cat"], axis=1)
                 strat_test_set = housing_data_frame.loc[test_index].drop(["income_cat"], axis=1)
                 
